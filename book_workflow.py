@@ -12,7 +12,7 @@ class BookWorkflow:
     @workflow.run
     async def run(self, input: BookVacationInput):
         compensations = []
-
+    
         try:
             compensations.append("undo_book_car")
             await workflow.execute_activity(

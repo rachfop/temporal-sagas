@@ -23,7 +23,7 @@ async def book_flight(input: BookVacationInput) -> str:
         if seats_available < 1:
             raise Exception("No seats remaining")
         else:
-            print(f"Booking hotel: {input.book_flight_id}")
+            print(f"Booking flight: {input.book_flight_id}")
     except Exception:
         raise Exception("No seats remaining")
 
