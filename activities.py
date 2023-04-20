@@ -1,7 +1,14 @@
 from temporalio import activity
-from obj import BookVacationInput
+import asyncio
+from dataclasses import dataclass
 
-import random
+
+@dataclass
+class BookVacationInput:
+    book_user_id: str
+    book_car_id: str
+    book_hotel_id: str
+    book_flight_id: str
 
 
 @activity.defn
@@ -18,26 +25,25 @@ async def book_hotel(input: BookVacationInput) -> str:
 
 @activity.defn
 async def book_flight(input: BookVacationInput) -> str:
-    seats_available = random.randint(0, 10)
-    try:
-        if seats_available < 1:
-            raise Exception("No seats remaining")
-        else:
-            print(f"Booking flight: {input.book_flight_id}")
-    except Exception:
-        raise Exception("No seats remaining")
+    if activity.info().attempt < 5:
+        activity.heartbeat(
+            f"Invoking activity, attempt number {activity.info().attempt}"
+        )
+        await asyncio.sleep(1)
+        raise RuntimeError("Service is down")
+    return f"Booking flight: {input.book_flight_id}\n"
 
 
 @activity.defn
 async def undo_book_car(input: BookVacationInput) -> str:
     print(f"Undoing booking of car: {input.book_car_id}")
-    return f"Undoing booking of car: {input.book_car_id}"
+    return f"Undoing booking of car: {input.book_car_id}\n"
 
 
 @activity.defn
 async def undo_book_hotel(input: BookVacationInput) -> str:
     print(f"Undoing booking of hotel: {input.book_hotel_id}")
-    return f"Undoing booking of hotel: {input.book_hotel_id}"
+    return f"Undoing booking of hotel: {input.book_hotel_id}\n"
 
 
 @activity.defn

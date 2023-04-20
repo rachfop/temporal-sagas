@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Book a Vacation</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #f7f7f7;
+      }
+
+      h1 {
+        color: #222222;
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      form {
+        margin: 0 auto;
+        width: 50%;
+        background-color: #ffffff;
+        padding: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      label {
+        font-size: 18px;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 10px;
+        color: #222222;
+      }
+
+      input[type="text"] {
+        font-size: 16px;
+        padding: 10px;
+        border: 2px solid #dddddd;
+        border-radius: 4px;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      input[type="submit"] {
+        font-size: 18px;
+        font-weight: bold;
+        background-color: #222222;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        padding: 10px;
+        width: 100%;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #444444;
+      }
+
+      h2 {
+        font-size: 24px;
+        font-weight: bold;
+        color: #222222;
+        margin-top: 30px;
+      }
+
+      p {
+        font-size: 18px;
+        color: #444444;
+        margin-bottom: 10px;
+      }
+
+      .cancelled {
+        background-color: #ffe6e6;
+        border: 2px solid #ff9999;
+        padding: 10px;
+        margin-top: 20px;
+      }
+
+      .booking-result {
+        background-color: #e6ffe6;
+        border: 2px solid #99ff99;
+        padding: 10px;
+        margin-top: 20px;
+      }
+
+      .booking-result p {
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Book a Vacation</h1>
+    <form method="post" action="/book">
+      <label for="name">Name:</label>
+      <input
+        type="text"
+        name="name"
+        id="name"
+        value="Your Temporal User"
+        required
+        placeholder="Your Temporal User"
+      /><br />
+    <form method="post" action="/book">
+      <label for="car">Car:</label>
+      <input
+        type="text"
+        name="car"
+        id="car"
+        value="Toyota Supra"
+        required
+        placeholder="Toyota Supra"
+      /><br />
+
+      <label for="hotel">Hotel:</label>
+      <input
+        type="text"
+        name="hotel"
+        id="hotel"
+        value="Hilton 123"
+        required
+        placeholder="Hilton 123"
+      /><br />
+
+      <label for="flight">Flight:</label>
+      <input
+        type="text"
+        name="flight"
+        id="flight"
+        value="Alaska Airlines 123"
+        required
+        placeholder="Alaska Airlines 123"
+      /><br />
+
+      <input type="submit" value="Book" />
+    </form>
+
+    {% if cancelled %}
+    <div class="canceled">
+      <h2>Booking Canceled</h2>
+      <p>Undoing Car</p>
+      <p>Undoing Hotel</p>
+      <p>Undoing Flight</p>
+    </div>
+    {% endif %} {% if result %}
+    <div class="result">
+      <h2>Booking Result</h2>
+      <p>{{ car }}</p>
+      <p>{{ hotel }}</p>
+      <p>{{ flight }}</p>
+      <p>Confirmation Number: {{ user_id }}</p>
+    </div>
+    {% endif %}
+  </body>
+</html>

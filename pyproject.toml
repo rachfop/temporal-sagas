@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 ruff = "^0.0.246"
+flask = {extras = ["async"], version = "^2.2.3"}
 
 [tool.poetry.group.dev.dependencies]
 temporalio = "^1.1.0"
@@ -17,10 +18,11 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poe.tasks]
-format = [{cmd = "ruff --fix ./*.py"}]
+format = [{cmd = "ruff check --fix ."}]
 lint = [{cmd = "ruff check ./*.py"}]
 
 
 [tool.ruff]
 select = ["E", "F"]
 line-length = 120
+fix = true
