@@ -36,6 +36,23 @@ poetry run python run_workflow.py
 ![](stat/../static/webui_failure.png)
 ![](static/failure.gif)
 
+
+### Demo: Recover forward
+
+Enter your booking information in the Flask app <http://127.0.0.1:5000>. then see the tasks in the Web UI at <http://localhost:8233/>.
+Select your running or completed Workflow ID.
+Under **Recent** events, select the failed Activity, `book_flight` (in compact view).
+Under **ActivityTaskStarted** you'll see the Attempts (5), and the stack trace message letting you know the last failed attempt.
+
+### Demo: Recover backwards
+
+In the `book_workflow.py` modify the global variable `ATTEMPTS_FLIGHT = 5` to `ATTEMPTS_FLIGHT = 2`, so that the `book_flight` Activity attempts a retry twice.
+Renter your booking information in the Flask app <http://127.0.0.1:5000>, then see the tasks in the Web UI at <http://localhost:8233/>.
+Select your running or completed Workflow ID.
+Under **Recent** events, select the failed Activity, `book_flight` (in compact view).
+Under **ActivityTaskStarted** you'll see the Attempts (2), and the stack trace message letting you know the last failed attempt.
+Then notice how the Workflow executes the compensations.
+
 ## Design
 
 The booking saga is implemented using the Temporal Workflow framework, which provides a robust and fault-tolerant platform for coordinating distributed transactions.

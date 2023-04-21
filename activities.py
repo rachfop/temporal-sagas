@@ -1,6 +1,7 @@
-from temporalio import activity
 import asyncio
 from dataclasses import dataclass
+
+from temporalio import activity
 
 
 @dataclass
@@ -25,7 +26,7 @@ async def book_hotel(input: BookVacationInput) -> str:
 
 @activity.defn
 async def book_flight(input: BookVacationInput) -> str:
-    if activity.info().attempt < 5:
+    if activity.info().attempt < 4:
         activity.heartbeat(
             f"Invoking activity, attempt number {activity.info().attempt}"
         )

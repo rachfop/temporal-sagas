@@ -1,10 +1,12 @@
+import uuid
+
+from flask import Flask, render_template, request
 from temporalio.client import Client
+
+from activities import BookVacationInput
 
 # Import the workflow from the previous code
 from book_workflow import BookWorkflow
-from activities import BookVacationInput
-from flask import Flask, request, render_template
-import uuid
 
 app = Flask(__name__)
 
@@ -16,7 +18,7 @@ async def display_form():
 
 @app.route("/book", methods=["POST"])
 async def book_vacation():
-    user_id = f'{request.form.get("name")}-{str(uuid.uuid4( ))}'
+    user_id = f'{request.form.get("name").replace(" ", "-").lower()}-{str(uuid.uuid4().int)[:6]}'
     car = request.form.get("car")
     hotel = request.form.get("hotel")
     flight = request.form.get("flight")

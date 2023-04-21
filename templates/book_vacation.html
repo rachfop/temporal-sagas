@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Book a Vacation</title>
+    <title>Temporal Book a Vacation</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       body {
         font-family: Arial, Helvetica, sans-serif;
@@ -13,7 +15,16 @@
         text-align: center;
         margin-top: 30px;
       }
-
+      h2 {
+        color: #222222;
+        text-align: center;
+        margin-top: 30px;
+      }
+      p {
+        color: #444444;
+        text-align: center;
+        margin-bottom: 10px;
+      }
       form {
         margin: 0 auto;
         width: 50%;
@@ -89,7 +100,10 @@
     </style>
   </head>
   <body>
-    <h1>Book a Vacation</h1>
+    <h1>Temporal Book a Vacation</h1>
+    <h2>GitHub: <a href="https://github.com/temporalio">github.com/temporalio</a></h2>
+    <h2>Docs: <a href="https://docs.temporal.io">docs.temporal.io</a></h2>
+    <p>Eliminate complex error or retry logic, avoid callbacks, and ensure that every workflow you start, completes. Temporal delivers durable execution for your services and applications.</p>
     <form method="post" action="/book">
       <label for="name">Name:</label>
       <input
@@ -106,9 +120,9 @@
         type="text"
         name="car"
         id="car"
-        value="Toyota Supra"
+        value="Ford 150"
         required
-        placeholder="Toyota Supra"
+        placeholder="Ford 150"
       /><br />
 
       <label for="hotel">Hotel:</label>

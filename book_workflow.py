@@ -1,11 +1,13 @@
-from temporalio import workflow
 from datetime import timedelta
+
+from temporalio import workflow
 from temporalio.common import RetryPolicy
 
 with workflow.unsafe.imports_passed_through():
-    from activities import book_car, book_hotel, book_flight, BookVacationInput
+    from activities import BookVacationInput, book_car, book_flight, book_hotel
 
-ATTEMPTS_FLIGHT = 3
+ATTEMPTS_FLIGHT = 5
+
 
 @workflow.defn
 class BookWorkflow:
@@ -15,7 +17,7 @@ class BookWorkflow:
 
         try:
             compensations.append("undo_book_car")
-            output = " " + await workflow.execute_activity(
+            output = await workflow.execute_activity(
                 book_car,
                 input,
                 start_to_close_timeout=timedelta(seconds=10),
