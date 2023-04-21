@@ -32,19 +32,19 @@ async def book_flight(input: BookVacationInput) -> str:
         )
         await asyncio.sleep(1)
         raise RuntimeError("Service is down")
-    return f"Booking flight: {input.book_flight_id}\n"
+    return f"Booking flight: {input.book_flight_id}"
 
 
 @activity.defn
 async def undo_book_car(input: BookVacationInput) -> str:
     print(f"Undoing booking of car: {input.book_car_id}")
-    return f"Undoing booking of car: {input.book_car_id}\n"
+    return f"Undoing booking of car: {input.book_car_id}"
 
 
 @activity.defn
 async def undo_book_hotel(input: BookVacationInput) -> str:
     print(f"Undoing booking of hotel: {input.book_hotel_id}")
-    return f"Undoing booking of hotel: {input.book_hotel_id}\n"
+    return f"Undoing booking of hotel: {input.book_hotel_id}"
 
 
 @activity.defn

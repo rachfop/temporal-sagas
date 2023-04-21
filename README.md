@@ -39,7 +39,7 @@ poetry run python run_workflow.py
 
 ### Demo: Recover forward
 
-Enter your booking information in the Flask app <http://127.0.0.1:5000>. then see the tasks in the Web UI at <http://localhost:8233/>.
+Enter your booking information in the Flask app <http://127.0.0.1:5000>, then see the tasks in the Web UI at <http://localhost:8233/>.
 Select your running or completed Workflow ID.
 Under **Recent** events, select the failed Activity, `book_flight` (in compact view).
 Under **ActivityTaskStarted** you'll see the Attempts (5), and the stack trace message letting you know the last failed attempt.

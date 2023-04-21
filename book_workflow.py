@@ -21,26 +21,12 @@ class BookWorkflow:
                 book_car,
                 input,
                 start_to_close_timeout=timedelta(seconds=10),
-                task_queue="saga-task-queue",
-                retry_policy=RetryPolicy(
-                    initial_interval=timedelta(seconds=1),
-                    maximum_interval=timedelta(seconds=1),
-                    maximum_attempts=3,
-                    non_retryable_error_types=["Exception"],
-                ),
             )
             compensations.append("undo_book_hotel")
             output += " " + await workflow.execute_activity(
                 book_hotel,
                 input,
                 start_to_close_timeout=timedelta(seconds=10),
-                task_queue="saga-task-queue",
-                retry_policy=RetryPolicy(
-                    initial_interval=timedelta(seconds=1),
-                    maximum_interval=timedelta(seconds=1),
-                    maximum_attempts=3,
-                    non_retryable_error_types=["Exception"],
-                ),
             )
 
             compensations.append("undo_book_flight")
@@ -48,7 +34,6 @@ class BookWorkflow:
                 book_flight,
                 input,
                 start_to_close_timeout=timedelta(seconds=10),
-                task_queue="saga-task-queue",
                 retry_policy=RetryPolicy(
                     initial_interval=timedelta(seconds=1),
                     maximum_interval=timedelta(seconds=1),
@@ -62,7 +47,6 @@ class BookWorkflow:
                 await workflow.execute_activity(
                     compensation,
                     input,
-                    task_queue="saga-task-queue",
                     start_to_close_timeout=timedelta(seconds=10),
                 )
 
