@@ -12,6 +12,8 @@ from book_workflow import BookWorkflow
 
 app = Flask(__name__)
 
+# Set to more than 1 to show activity retries due to service down
+ATTEMPTS = 5
 
 @app.route("/")
 async def display_form():
@@ -30,6 +32,7 @@ async def book_vacation():
         book_car_id=car,
         book_hotel_id=hotel,
         book_flight_id=flight,
+        attempts=ATTEMPTS,
     )
 
     if os.getenv('TEMPORAL_MTLS_TLS_CERT') and os.getenv('TEMPORAL_MTLS_TLS_KEY') is not None:
