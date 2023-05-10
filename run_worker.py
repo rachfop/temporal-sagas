@@ -17,19 +17,21 @@ from book_workflow import BookWorkflow
 
 
 async def main():
-
-    if os.getenv('TEMPORAL_MTLS_TLS_CERT') and os.getenv('TEMPORAL_MTLS_TLS_KEY') is not None:
+    if (
+        os.getenv("TEMPORAL_MTLS_TLS_CERT")
+        and os.getenv("TEMPORAL_MTLS_TLS_KEY") is not None
+    ):
         server_root_ca_cert: Optional[bytes] = None
-        f = open(os.getenv('TEMPORAL_MTLS_TLS_CERT'), "rb")
-        client_cert = f.read()
+        with open(os.getenv("TEMPORAL_MTLS_TLS_CERT"), "rb") as f:
+            client_cert = f.read()
 
-        f = open(os.getenv('TEMPORAL_MTLS_TLS_KEY'), "rb")
-        client_key = f.read()
+        with open(os.getenv("TEMPORAL_MTLS_TLS_KEY"), "rb") as f:
+            client_key = f.read()
 
         # Start client
         client = await Client.connect(
-            os.getenv('TEMPORAL_HOST_URL'),
-            namespace=os.getenv('TEMPORAL_NAMESPACE'),
+            os.getenv("TEMPORAL_HOST_URL"),
+            namespace=os.getenv("TEMPORAL_NAMESPACE"),
             tls=TLSConfig(
                 server_root_ca_cert=server_root_ca_cert,
                 client_cert=client_cert,
@@ -37,7 +39,7 @@ async def main():
             ),
         )
     else:
-      client = await Client.connect("localhost:7233")     
+        client = await Client.connect("localhost:7233")
 
     worker = Worker(
         client,
@@ -53,6 +55,7 @@ async def main():
         ],
     )
     await worker.run()
+
 
 if __name__ == "__main__":
     asyncio.run(main())

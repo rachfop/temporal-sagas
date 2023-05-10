@@ -21,7 +21,7 @@ With this repository cloned, run the following at the root of the directory:
 ```bash
 poetry install
 ```
-That loads all required dependencies. 
+That loads all required dependencies.
 
 Then run the worker and workflow.
 
@@ -36,22 +36,40 @@ poetry run python run_workflow.py
 ![](stat/../static/webui_failure.png)
 ![](static/failure.gif)
 
-
-### Demo: Recover forward
-
+### Demo: Happy Path
 Enter your booking information in the Flask app <http://127.0.0.1:5000>, then see the tasks in the Web UI at <http://localhost:8233/>.
+
 Select your running or completed Workflow ID.
+
+Under **WorkflowExecutionCompleted** car, hotel and flight are booked.
+
+Notice each is executed via an activity.
+
+### Demo: Recover Forward (retries)
+
+In the `run_workflow.py` modify the global variable `ATTEMPTS = 1` to `ATTEMPTS = 3`, so that the `book_flight` Activity attempts a retry 3 times.
+Render your booking information in the Flask app <http://127.0.0.1:5000>, then see the tasks in the Web UI at <http://localhost:8233/>.
+
+Select your running or completed Workflow ID.
+
 Under **Recent** events, select the failed Activity, `book_flight` (in compact view).
+
+Under **ActivityTaskStarted** you'll see the Attempts (3), and the stack trace message letting you know the last failed attempt.
+
+Then notice how the Workflow executes the compensations.
+
+### Demo: Recover Backward (rollback)
+
+In the `run_workflow.py` modify the global variable `ATTEMPTS = 3` to `ATTEMPTS = 5`, so that the `book_flight` Activity attempts a retry 5 times.
+Render your booking information in the Flask app <http://127.0.0.1:5000>, then see the tasks in the Web UI at <http://localhost:8233/>.
+
+Select your running or completed Workflow ID.
+
+Under **Recent** events, select the failed Activity, `book_flight` (in compact view).
+
 Under **ActivityTaskStarted** you'll see the Attempts (5), and the stack trace message letting you know the last failed attempt.
 
-### Demo: Recover backwards
-
-In the `book_workflow.py` modify the global variable `ATTEMPTS_FLIGHT = 5` to `ATTEMPTS_FLIGHT = 2`, so that the `book_flight` Activity attempts a retry twice.
-Renter your booking information in the Flask app <http://127.0.0.1:5000>, then see the tasks in the Web UI at <http://localhost:8233/>.
-Select your running or completed Workflow ID.
-Under **Recent** events, select the failed Activity, `book_flight` (in compact view).
-Under **ActivityTaskStarted** you'll see the Attempts (2), and the stack trace message letting you know the last failed attempt.
-Then notice how the Workflow executes the compensations.
+Under **ActivityTaskFailed** you'll see error `Too many retries, flight booking not possible at this time!`. You will also see that since the booking cannot be completed, rollback (undo) is performed using compensation.
 
 ## Design
 

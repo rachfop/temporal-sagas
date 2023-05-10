@@ -1,3 +1,4 @@
+import asyncio
 from datetime import timedelta
 
 from temporalio import workflow
@@ -5,8 +6,6 @@ from temporalio.common import RetryPolicy
 
 with workflow.unsafe.imports_passed_through():
     from activities import BookVacationInput, book_car, book_flight, book_hotel
-
-ATTEMPTS_FLIGHT = 5
 
 
 @workflow.defn
@@ -29,6 +28,9 @@ class BookWorkflow:
                 start_to_close_timeout=timedelta(seconds=10),
             )
 
+            # Sleep to simulate flight booking taking longer, allowing for worker restart while workflow running
+            await asyncio.sleep(15)
+
             compensations.append("undo_book_flight")
             output += " " + await workflow.execute_activity(
                 book_flight,
@@ -37,7 +39,7 @@ class BookWorkflow:
                 retry_policy=RetryPolicy(
                     initial_interval=timedelta(seconds=1),
                     maximum_interval=timedelta(seconds=1),
-                    maximum_attempts=ATTEMPTS_FLIGHT,
+                    maximum_attempts=input.attempts,
                     non_retryable_error_types=["Exception"],
                 ),
             )

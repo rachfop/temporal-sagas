@@ -10,6 +10,7 @@ class BookVacationInput:
     book_car_id: str
     book_hotel_id: str
     book_flight_id: str
+    attempts: int
 
 
 @activity.defn
@@ -26,12 +27,18 @@ async def book_hotel(input: BookVacationInput) -> str:
 
 @activity.defn
 async def book_flight(input: BookVacationInput) -> str:
-    if activity.info().attempt < 4:
+    if activity.info().attempt < input.attempts:
         activity.heartbeat(
             f"Invoking activity, attempt number {activity.info().attempt}"
         )
         await asyncio.sleep(1)
         raise RuntimeError("Service is down")
+    elif activity.info().attempt > 3:
+        raise RuntimeError(
+            "Too many retries, flight booking not possible at this time!"
+        )
+
+    print(f"Booking flight: {input.book_flight_id}")
     return f"Booking flight: {input.book_flight_id}"
 
 
