@@ -38,28 +38,38 @@ poetry run python run_workflow.py
 
 ### Demo: Happy Path
 Enter your booking information in the Flask app <http://127.0.0.1:5000>, then see the tasks in the Web UI at <http://localhost:8233/>.
+
 Select your running or completed Workflow ID.
+
 Under **WorkflowExecutionCompleted** car, hotel and flight are booked.
+
 Notice each is executed via an activity.
 
 ### Demo: Recover Forward (retries)
 In the `run_workflow.py` modify the global variable `ATTEMPTS = 1` to `ATTEMPTS = 3`, so that the `book_flight` Activity attempts a retry 3 times.
-Renter your booking information in the Flask app <http://127.0.0.1:5000>, then see the tasks in the Web UI at <http://localhost:8233/>.
+Render your booking information in the Flask app <http://127.0.0.1:5000>, then see the tasks in the Web UI at <http://localhost:8233/>.
+
 Select your running or completed Workflow ID.
+
 Under **Recent** events, select the failed Activity, `book_flight` (in compact view).
+
 Under **ActivityTaskStarted** you'll see the Attempts (3), and the stack trace message letting you know the last failed attempt.
+
 Then notice how the Workflow executes the compensations.
 
 ### Demo: Recover Backward (rollback)
 In the `run_workflow.py` modify the global variable `ATTEMPTS = 3` to `ATTEMPTS = 5`, so that the `book_flight` Activity attempts a retry 5 times.
-Renter your booking information in the Flask app <http://127.0.0.1:5000>, then see the tasks in the Web UI at <http://localhost:8233/>.
+Render your booking information in the Flask app <http://127.0.0.1:5000>, then see the tasks in the Web UI at <http://localhost:8233/>.
+
 Select your running or completed Workflow ID.
+ 
 Under **Recent** events, select the failed Activity, `book_flight` (in compact view).
+
 Under **ActivityTaskStarted** you'll see the Attempts (5), and the stack trace message letting you know the last failed attempt.
+
 Under **ActivityTaskFailed** you'll see error `Too many retries, flight booking not possible at this time!`. You will also see that since the booking cannot be completed, rollback (undo) is performed using compensation. 
 
 ## Design
-
 The booking saga is implemented using the Temporal Workflow framework, which provides a robust and fault-tolerant platform for coordinating distributed transactions.
 
 The saga workflow consists of three activities: `book_car()`, `book_hotel)()`, and `book_flight)()`, each of which is responsible for making a reservation with the corresponding service provider. If any of these activities fail, the workflow will trigger the corresponding compensating action (`undo_book_car()`, `undo_book_hotel()`, or `undo_book_flight()`) to undo any previous bookings.
