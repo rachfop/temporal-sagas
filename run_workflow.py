@@ -13,7 +13,7 @@ from book_workflow import BookWorkflow
 app = Flask(__name__)
 
 # Set to more than 1 to show activity retries due to service down
-ATTEMPTS = 5
+ATTEMPTS = 1
 
 @app.route("/")
 async def display_form():
