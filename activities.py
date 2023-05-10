@@ -34,7 +34,9 @@ async def book_flight(input: BookVacationInput) -> str:
         await asyncio.sleep(1)
         raise RuntimeError("Service is down")
     elif activity.info().attempt > 3:
-        raise Exception("Too many retries, flight booking not possible at this time!")
+        raise RuntimeError(
+            "Too many retries, flight booking not possible at this time!"
+        )
 
     print(f"Booking flight: {input.book_flight_id}")
     return f"Booking flight: {input.book_flight_id}"

@@ -30,7 +30,7 @@ class BookWorkflow:
 
             # Sleep to simulate flight booking taking longer, allowing for worker restart while workflow running
             await asyncio.sleep(15)
-        
+
             compensations.append("undo_book_flight")
             output += " " + await workflow.execute_activity(
                 book_flight,

@@ -15,6 +15,7 @@ app = Flask(__name__)
 # Set to more than 1 to show activity retries due to service down
 ATTEMPTS = 1
 
+
 @app.route("/")
 async def display_form():
     return render_template("book_vacation.html")
@@ -35,18 +36,21 @@ async def book_vacation():
         attempts=ATTEMPTS,
     )
 
-    if os.getenv('TEMPORAL_MTLS_TLS_CERT') and os.getenv('TEMPORAL_MTLS_TLS_KEY') is not None:
+    if (
+        os.getenv("TEMPORAL_MTLS_TLS_CERT")
+        and os.getenv("TEMPORAL_MTLS_TLS_KEY") is not None
+    ):
         server_root_ca_cert: Optional[bytes] = None
-        f = open(os.getenv('TEMPORAL_MTLS_TLS_CERT'), "rb")
+        f = open(os.getenv("TEMPORAL_MTLS_TLS_CERT"), "rb")
         client_cert = f.read()
 
-        f = open(os.getenv('TEMPORAL_MTLS_TLS_KEY'), "rb")
+        f = open(os.getenv("TEMPORAL_MTLS_TLS_KEY"), "rb")
         client_key = f.read()
 
         # Start client
         client = await Client.connect(
-            os.getenv('TEMPORAL_HOST_URL'),
-            namespace=os.getenv('TEMPORAL_NAMESPACE'),
+            os.getenv("TEMPORAL_HOST_URL"),
+            namespace=os.getenv("TEMPORAL_NAMESPACE"),
             tls=TLSConfig(
                 server_root_ca_cert=server_root_ca_cert,
                 client_cert=client_cert,
@@ -54,7 +58,7 @@ async def book_vacation():
             ),
         )
     else:
-      client = await Client.connect("localhost:7233")  
+        client = await Client.connect("localhost:7233")
 
     result = await client.execute_workflow(
         BookWorkflow.run,
@@ -84,4 +88,4 @@ async def book_vacation():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host="0.0.0.0", debug=True)
