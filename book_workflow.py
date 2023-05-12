@@ -20,16 +20,19 @@ class BookWorkflow:
                 book_car,
                 input,
                 start_to_close_timeout=timedelta(seconds=10),
+                retry_policy=RetryPolicy(
+                    non_retryable_error_types=["Exception"],
+                ),                  
             )
             compensations.append("undo_book_hotel")
             output += " " + await workflow.execute_activity(
                 book_hotel,
                 input,
                 start_to_close_timeout=timedelta(seconds=10),
+                retry_policy=RetryPolicy(
+                    non_retryable_error_types=["Exception"],
+                ),                
             )
-
-            # Sleep to simulate flight booking taking longer, allowing for worker restart while workflow running
-            await asyncio.sleep(15)
 
             compensations.append("undo_book_flight")
             output += " " + await workflow.execute_activity(

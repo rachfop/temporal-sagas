@@ -105,6 +105,15 @@
     <h2>Docs: <a href="https://docs.temporal.io">docs.temporal.io</a></h2>
     <p>Eliminate complex error or retry logic, avoid callbacks, and ensure that every workflow you start, completes. Temporal delivers durable execution for your services and applications.</p>
     <form method="post" action="/book">
+      <label for="name">Attempts:</label>
+      <input
+        type="text"
+        name="attempts"
+        id="attempts"
+        value="1"
+        required
+        placeholder="Your Temporal User"
+      /><br />      
       <label for="name">Name:</label>
       <input
         type="text"
