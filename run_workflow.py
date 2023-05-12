@@ -24,16 +24,17 @@ async def display_form():
 @app.route("/book", methods=["POST"])
 async def book_vacation():
     user_id = f'{request.form.get("name").replace(" ", "-").lower()}-{str(uuid.uuid4().int)[:6]}'
+    attempts = request.form.get("attempts")
     car = request.form.get("car")
     hotel = request.form.get("hotel")
     flight = request.form.get("flight")
 
     input = BookVacationInput(
+        attempts=int(attempts),
         book_user_id=user_id,
         book_car_id=car,
         book_hotel_id=hotel,
         book_flight_id=flight,
-        attempts=ATTEMPTS,
     )
 
     if (

@@ -15,28 +15,50 @@ class BookVacationInput:
 
 @activity.defn
 async def book_car(input: BookVacationInput) -> str:
+    await asyncio.sleep(3)
+    if activity.info().attempt < input.attempts:
+        activity.heartbeat(
+            f"Invoking activity, attempt number {activity.info().attempt}"
+        )
+        await asyncio.sleep(3)
+        raise RuntimeError("Car service is down")
+    
+    if "invalid" in input.book_car_id:
+        raise Exception("Invalid car booking, rolling back!")
+
     print(f"Booking car: {input.book_car_id}")
     return f"Booked car: {input.book_car_id}"
 
 
 @activity.defn
 async def book_hotel(input: BookVacationInput) -> str:
+    await asyncio.sleep(3)
+    if activity.info().attempt < input.attempts:
+        activity.heartbeat(
+            f"Invoking activity, attempt number {activity.info().attempt}"
+        )
+        await asyncio.sleep(3)
+        raise RuntimeError("Hotel service is down")
+    
+    if "invalid" in input.book_hotel_id:
+        raise Exception("Invalid hotel booking, rolling back!")
+
     print(f"Booking hotel: {input.book_hotel_id}")
     return f"Booked hotel: {input.book_hotel_id}"
 
 
 @activity.defn
 async def book_flight(input: BookVacationInput) -> str:
+    await asyncio.sleep(3)
     if activity.info().attempt < input.attempts:
         activity.heartbeat(
             f"Invoking activity, attempt number {activity.info().attempt}"
         )
-        await asyncio.sleep(1)
-        raise RuntimeError("Service is down")
-    elif activity.info().attempt > 3:
-        raise RuntimeError(
-            "Too many retries, flight booking not possible at this time!"
-        )
+        await asyncio.sleep(3)
+        raise RuntimeError("Flight service is down")
+    
+    if "invalid" in input.book_flight_id:
+        raise Exception("Invalid flight booking, rolling back!")
 
     print(f"Booking flight: {input.book_flight_id}")
     return f"Booking flight: {input.book_flight_id}"
